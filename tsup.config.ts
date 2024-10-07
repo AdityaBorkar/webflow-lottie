@@ -6,7 +6,7 @@ export default defineConfig({
   clean: true,
   dts: false,
   sourcemap: false,
-  entry: ["src/**/*.ts", "!src/**/*.test.*"],
+  entry: ["src/index.ts"],
   format: "esm",
   outDir: "dist",
 });
