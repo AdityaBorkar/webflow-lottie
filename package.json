@@ -1,0 +1,51 @@
+{
+    "name": "webflow-lottie",
+    "description": "Fixes and improvements to Lottie Extensions for Webflow",
+    "version": "0.1.0",
+    "license": "MIT",
+    "keywords": [
+        "webflow",
+        "lottie",
+        "lazy",
+        "loading",
+        "performance"
+    ],
+    "author": {
+        "name": "Aditya Borkar",
+        "email": "aditya.borkar.programs@gmail.com",
+        "url": "https://adityaborkar.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/AdityaBorkar/webflow-lottie"
+    },
+    "publishConfig": {
+        "provenance": true
+    },
+    "engines": {
+        "node": ">=18.3.0"
+    },
+    "main": "./dist/index.js",
+    "exports": {
+        ".": "./dist/index.js"
+    },
+    "type": "module",
+    "files": [
+        "dist/",
+        "package.json",
+        "LICENSE.md",
+        "README.md"
+    ],
+    "scripts": {
+        "tsc": "tsc",
+        "build": "tsup",
+        "format": "prettier .",
+        "dev": "tsup --watch",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "devDependencies": {
+        "tsup": "^8.2.4",
+        "typescript": "^5.5.4"
+    },
+    "packageManager": "pnpm@9.11.0"
+}
