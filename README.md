@@ -4,11 +4,16 @@ You can check out this page on [JSDeliver](https://www.jsdelivr.com/package/gh/a
 
 ## Introduction
 
-> [!TIP]
-> Forked from [library-webflow_lottie-lazy-loaderer v2.5](https://github.com/athlonstudio/library-webflow_lottie-lazy-loaderer)
-
-Improvements and fixes to Lottie Extension for Webflow.
+Improvements and fixes to Lottie Extension for Webflow. Better performance for Lottie elements.
 <!-- TODO - Add more documentation -->
+
+Features:
+
+- Lazy load Lottie elements
+- Play Lottie elements once
+- Placeholder images for Lottie elements
+- Fix filters and shadows on Lottie elements
+- Fix transform on Lottie elements
 
 This package is maintained by
 

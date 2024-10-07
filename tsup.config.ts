@@ -1,7 +1,7 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  minify: true,
+  // minify: true,
   bundle: true,
   clean: true,
   dts: false,
