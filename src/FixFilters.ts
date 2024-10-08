@@ -1,4 +1,4 @@
-export default function LOTTIE_fixFilters(element: HTMLElement) {
+export default function FixFilters(element: HTMLElement) {
   element.querySelectorAll("filter").forEach((filter) => {
     filter.setAttribute("x", "-50%");
     filter.setAttribute("y", "-50%");

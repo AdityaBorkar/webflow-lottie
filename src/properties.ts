@@ -1,27 +1,43 @@
 export type Properties = {
-  fixFilters: boolean;
   lazyLoad: boolean;
   playOnce: boolean;
-  placeholder: string | undefined;
+  fixFilters: boolean;
   fixTransform: boolean;
+  placeholder: string;
 };
 
-export default function parseProperties(element: HTMLElement) {
-  const properties = (element.getAttribute("webflow-lottie") || "").split(" ");
-  if (properties.length <= 0) return undefined;
-  return {
-    fixFilters:
-      element.hasAttribute("fix-filters") || properties.includes("fix-filters"),
-    lazyLoad:
-      element.hasAttribute("lazy-load") || properties.includes("lazy-load"),
-    playOnce:
-      element.hasAttribute("play-once") || properties.includes("play-once"),
-    placeholder:
-      element.hasAttribute("placeholder") || properties.includes("placeholder")
-        ? element.getAttribute("placeholder") || undefined
-        : undefined,
-    fixTransform:
-      element.hasAttribute("fix-transform") ||
-      properties.includes("fix-transform"),
-  } satisfies Properties;
+const ValidProperties: (keyof Properties)[] = [
+  "lazyLoad",
+  "playOnce",
+  "fixFilters",
+  "fixTransform",
+  "placeholder",
+];
+
+export function extractProperties(element: HTMLElement): [string, string] {
+  const properties = element.getAttribute("webflow-lottie") || "";
+  const placeholder = element.getAttribute("placeholder") || "";
+  return [properties, placeholder];
+}
+
+export function parseProperties(property: string, placeholder?: string) {
+  let properties = {} satisfies Partial<Properties>;
+
+  property.split(" ").forEach((property) => {
+    const negation = property.startsWith("no-");
+    const name = (negation ? property.slice(3) : property) as keyof Properties;
+    // @ts-expect-error
+    if (ValidProperties.includes(name)) properties[name] = !negation;
+  });
+
+  // @ts-expect-error
+  if (placeholder) properties["placeholder"] = placeholder;
+
+  return properties;
+}
+
+export function mergeProperties(...properties: Partial<Properties>[]) {
+  return properties.reduce((oldProp, newProp) => {
+    return { ...oldProp, ...newProp };
+  }, {} as Partial<Properties>);
 }
