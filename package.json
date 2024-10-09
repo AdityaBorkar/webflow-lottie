@@ -36,6 +36,7 @@
         "LICENSE.md",
         "README.md"
     ],
+    "jsdelivr": "dist/",
     "scripts": {
         "tsc": "tsc",
         "build": "MINIFY=true tsup",

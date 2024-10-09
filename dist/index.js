@@ -1,1 +1,145 @@
-function d(e){e.querySelectorAll("filter").forEach(i=>{i.setAttribute("x","-50%"),i.setAttribute("y","-50%"),i.setAttribute("width","200%"),i.setAttribute("height","200%")})}function g(e,i){if(e.setAttribute("data-animation-type","lazy-lottie"),e.style.overflow="hidden",i){e.style.position!=="absolute"&&(e.style.position="relative");let o=document.createElement("img");o.setAttribute("src",i||""),o.setAttribute("loading","eager"),o.setAttribute("aria-hidden","true"),o.setAttribute("style","position:absolute;left:50%;transform:translate(-50%,-50%);"),e.appendChild(o)}}var x=["lazyLoad","playOnce","fixFilters","fixTransform","placeholder"];function u(e){let i=e.getAttribute("webflow-lottie")||"",o=e.getAttribute("placeholder")||"";return[i,o]}function a(e,i){let o={};return e.split(" ").forEach(n=>{let c=n.startsWith("no-"),t=c?n.slice(3):n;x.includes(t)&&(o[t]=!c)}),i&&(o.placeholder=i),o}function p(...e){return e.reduce((i,o)=>({...i,...o}),{})}function L(e){return e.children.length&&(e.children[0].tagName.toLowerCase()==="svg"||e.children[0].tagName.toLowerCase()==="canvas")}function y(e){let i=new IntersectionObserver(t=>t.forEach(r=>c(r)),{root:null,rootMargin:e.lazyLoadOffset}),o=new IntersectionObserver(t=>t.forEach(r=>{let s=r.target;s.style.display!=="none"&&L(s)&&n(r)}),{root:null,rootMargin:"0px"});document.querySelectorAll(e.target).forEach((t,r)=>{let s=p(e.defaultProperties,a(...u(t)));t.setAttribute("webflow-lottie-index",(r+1).toString()),s?.fixFilters&&d(t),s?.fixTransform&&(t.style.top="0px",t.style.left="0px",t.style.position="absolute"),s?.lazyLoad&&(g(t,s.placeholder),i.observe(t),o.observe(t))});function n(t){let r=t.target,s=r.getAttribute("webflow-lottie-index")||"",b=p(e.defaultProperties,a(...u(r))),l=t.isIntersecting,f=window.WebflowLottieList[s];l?f.play():f.stop(),l&&b?.playOnce&&o.unobserve(r)}function c(t){let r=t.target;if(!(t.isIntersecting&&!L(r)&&r.style.display!=="none"))return;let b=r.getAttribute("webflow-lottie-index")||"",l=p(e.defaultProperties,a(...u(r)));r.setAttribute("data-animation-type","lottie");let f=Webflow.require("lottie").createInstance(r);window.WebflowLottieList[b]=f;let w=new MutationObserver(()=>{w.disconnect(),l?.fixFilters&&d(r),l?.fixTransform&&(r.style.position="relative"),r.querySelector("img")?.remove()});w.observe(r,{childList:!0,subtree:!0}),!(t.boundingClientRect.bottom<0||t.boundingClientRect.top-Math.max(document.documentElement.clientHeight,window.innerHeight)>=0)&&n(t),i.unobserve(r)}}window.WebflowLottieList=[];var m=document.querySelector("#webflow-lottie");y({target:m.getAttribute("target")||"[data-animation-type='lottie']",lazyLoadOffset:m.getAttribute("lazy-load-offset")||"125vh",defaultProperties:a(m.getAttribute("default-attributes")||"")});
+// src/FixFilters.ts
+function FixFilters(element) {
+  element.querySelectorAll("filter").forEach((filter) => {
+    filter.setAttribute("x", "-50%");
+    filter.setAttribute("y", "-50%");
+    filter.setAttribute("width", "200%");
+    filter.setAttribute("height", "200%");
+  });
+}
+
+// src/SetLazyLoad.ts
+function SetLazyLoad(element, placeholder) {
+  element.setAttribute("data-animation-type", "lazy-lottie");
+  element.style.overflow = "hidden";
+  if (placeholder) {
+    if (element.style.position !== "absolute")
+      element.style.position = "relative";
+    const PlaceholderEl = document.createElement("img");
+    PlaceholderEl.setAttribute("src", placeholder || "");
+    PlaceholderEl.setAttribute("loading", "eager");
+    PlaceholderEl.setAttribute("aria-hidden", "true");
+    PlaceholderEl.setAttribute(
+      "style",
+      "position:absolute;left:50%;transform:translate(-50%,-50%);"
+    );
+    element.appendChild(PlaceholderEl);
+  }
+}
+
+// src/properties.ts
+var ValidProperties = [
+  "lazyLoad",
+  "playOnce",
+  "fixFilters",
+  "fixTransform",
+  "placeholder"
+];
+function extractProperties(element) {
+  const properties = element.getAttribute("webflow-lottie") || "";
+  const placeholder = element.getAttribute("placeholder") || "";
+  return [properties, placeholder];
+}
+function parseProperties(property, placeholder) {
+  let properties = {};
+  property.split(" ").forEach((property2) => {
+    const negation = property2.startsWith("no-");
+    const name = negation ? property2.slice(3) : property2;
+    if (ValidProperties.includes(name)) properties[name] = !negation;
+  });
+  if (placeholder) properties["placeholder"] = placeholder;
+  return properties;
+}
+function mergeProperties(...properties) {
+  return properties.reduce((oldProp, newProp) => {
+    return { ...oldProp, ...newProp };
+  }, {});
+}
+
+// src/utils.ts
+function isLoaded(element) {
+  return element.children.length && (element.children[0].tagName.toLowerCase() === "svg" || element.children[0].tagName.toLowerCase() === "canvas");
+}
+
+// src/init.ts
+function init(props) {
+  const LazyLoadObserver = new IntersectionObserver(
+    (entries) => entries.forEach((entry) => LOTTIE_handleLoad(entry)),
+    { root: null, rootMargin: props.lazyLoadOffset }
+  );
+  const LazyPlayObserver = new IntersectionObserver(
+    (entries) => entries.forEach((entry) => {
+      const element = entry.target;
+      if (element.style.display !== "none" && isLoaded(element))
+        LOTTIE_handlePlay(entry);
+    }),
+    { root: null, rootMargin: "0px" }
+  );
+  document.querySelectorAll(props.target).forEach(
+    (element, index) => {
+      const properties = mergeProperties(
+        props.defaultProperties,
+        parseProperties(...extractProperties(element))
+      );
+      element.setAttribute("webflow-lottie-index", (index + 1).toString());
+      if (properties?.fixFilters) FixFilters(element);
+      if (properties?.fixTransform) {
+        element.style.top = "0px";
+        element.style.left = "0px";
+        element.style.position = "absolute";
+      }
+      if (properties?.lazyLoad) {
+        SetLazyLoad(element, properties.placeholder);
+        LazyLoadObserver.observe(element);
+        LazyPlayObserver.observe(element);
+      }
+    }
+  );
+  function LOTTIE_handlePlay(entry) {
+    const element = entry.target;
+    const index = element.getAttribute("webflow-lottie-index") || "";
+    const properties = mergeProperties(
+      props.defaultProperties,
+      parseProperties(...extractProperties(element))
+    );
+    const isInView = entry.isIntersecting;
+    const lottie = window["WebflowLottieList"][index];
+    if (isInView) lottie.play();
+    else lottie.stop();
+    if (isInView && properties?.playOnce) LazyPlayObserver.unobserve(element);
+  }
+  function LOTTIE_handleLoad(entry) {
+    const element = entry.target;
+    const flag = entry.isIntersecting && !isLoaded(element) && element.style.display !== "none";
+    if (!flag) return;
+    const index = element.getAttribute("webflow-lottie-index") || "";
+    const properties = mergeProperties(
+      props.defaultProperties,
+      parseProperties(...extractProperties(element))
+    );
+    element.setAttribute("data-animation-type", "lottie");
+    const lottie = Webflow.require("lottie").createInstance(element);
+    window["WebflowLottieList"][index] = lottie;
+    const mutationObserver = new MutationObserver(() => {
+      mutationObserver.disconnect();
+      if (properties?.fixFilters) FixFilters(element);
+      if (properties?.fixTransform) element.style.position = "relative";
+      element.querySelector("img")?.remove();
+    });
+    mutationObserver.observe(element, { childList: true, subtree: true });
+    const isInView = !(entry.boundingClientRect.bottom < 0 || entry.boundingClientRect.top - Math.max(document.documentElement.clientHeight, window.innerHeight) >= 0);
+    if (isInView) LOTTIE_handlePlay(entry);
+    LazyLoadObserver.unobserve(element);
+  }
+}
+
+// src/index.ts
+window["WebflowLottieList"] = [];
+var script = document.querySelector("#webflow-lottie");
+init({
+  target: script.getAttribute("target") || "[data-animation-type='lottie']",
+  lazyLoadOffset: script.getAttribute("lazy-load-offset") || "125vh",
+  defaultProperties: parseProperties(
+    script.getAttribute("default-attributes") || ""
+  )
+});

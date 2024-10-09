@@ -1,78 +1,115 @@
 # webflow-lottie
 
-You can check out this page on [JSDeliver](https://www.jsdelivr.com/package/gh/athlonstudio/webflow-lottie-lazy-loader)
+<!-- [![jsDelivr](https://data.jsdelivr.com/v1/package/gh/adityaborkar/webflow-lottie/badge?style=rounded)](https://www.jsdelivr.com/package/gh/adityaborkar/webflow-lottie) -->
+
+> [!TIP]
+> You can check out this page on [JSDeliver](https://www.jsdelivr.com/package/gh/adityaborkar/webflow-lottie)
 
 ## Introduction
 
-Improvements and fixes to Lottie Extension for Webflow. Better performance for Lottie elements.
-<!-- TODO - Add more documentation -->
+Enhance your Webflow projects with optimized Lottie animations using this lightweight library. Key features:
 
-Features:
+- ✨ Lazy loading
+- 🔁 Single-play option
+- 📏 Layout shift prevention
+- 🖼️ Placeholder support
+- 🎨 Filter and shadow fixes
+- 🔧 Transform corrections
+- 📦 Minified size: < 3KB
 
-- Lazy load Lottie elements
-- Play Lottie elements once
-- Placeholder images for Lottie elements
-- Fix filters and shadows on Lottie elements
-- Fix transform on Lottie elements
-- <5Kb minified and gzipped
-
->> [!IMPORTANT]
->> Facing issues with the library? Or, you have other problems related to After Effects, Lottie, or Webflow? Feel free to open an issue on GitHub OR contact the maintainers below.
-
-This package is maintained by
-
-- Aditya Borkar (Full Stack Developer) [[GitHub Profile]](https://github.com/adityaborkar) [[Email]](mailto:aditya.borkar.programs@gmail.com)
-<!-- [Website](https://adityaborkar.com) [Email](mailto:hi@adityaborkar.com) -->
-- Onkar Jadhav (Webflow Developer and Designer). [[Website]](https://onkarjadhav.com) [[Email]](mailto:hi@onkarjadhav.com)
+> [!NOTE]
+> Need help or have questions? Open an issue on GitHub or contact the maintainers:
+> - Aditya Borkar (Full Stack Developer)
+>   [[GitHub]](https://github.com/adityaborkar) [[Email]](mailto:aditya.borkar.programs@gmail.com)
+> - Onkar Jadhav (Webflow Developer and Designer)
+>   [[Website]](https://onkarjadhav.com) [[Email]](mailto:hi@onkarjadhav.com)
 
 ## Usage
 
-1. Add this script to the page's body or the site's footer. Also add the comments, so that your teammates or the developers who take over your code in the future can understand the custom script.
+1. Add the script to your Webflow project:
+   - Place in the page's body or site's footer
+   - Include the comment for future reference
 
-    ```html
-    <!-- To understand this custom script, follow: https://github.com/adityaborkar/webflow-lottie -->
-    <script type='module' src='https://cdn.jsdelivr.net/gh/adityaborkar/webflow-lottie@0.2.0/dist/index.js'
-        id="webflow-lottie" default-attributes="fix-filters lazy-load" />
-    ```
+   ```html
+   <!-- Webflow Lottie Library: https://github.com/adityaborkar/webflow-lottie -->
+   <script type='module' src='https://cdn.jsdelivr.net/gh/adityaborkar/webflow-lottie@0.2.0/dist/index.js'
+           id="webflow-lottie" default-attributes="fix-filters lazy-load"></script>
+   ```
 
-    To target selective lottie elements, use `target="[webflow-lottie]"`
+   Note: To target specific Lottie elements, use `target="[webflow-lottie]"` in the script tag.
 
-2. Add the `webflow-lottie="[properties]"` custom attribute to the Lottie element. Tip - `properties` can be blank
+2. Apply to Lottie elements:
+   - Add `webflow-lottie="[properties]"` attribute to each Lottie element
+   - `[properties]` can be left blank or filled with specific options
 
-3. Use attributes to control the properties of the Lottie element.
+3. Customize behavior:
+   - Use additional attributes to control Lottie element properties
+   - See "Custom Attributes" section below for details
 
 ## Custom Attributes
 
-### Script Element
+### Script Element Attributes
 
-- `target="*"` - Enables this library for all Lottie elements on the page. Currently it supports only two values = "" or "*"
-- `lazy-load-offset=""` - Sets the offset for the lazy load feature. Defaults to `1250px`.
-- `default-properties="[properties]"` - Sets the default attributes for the Lottie elements.
+1. **`target="<selectors>"`**
+   - Purpose: Selects Lottie elements on the page.
+   - Default: `[data-animation-type='lottie']`
+   - Example: Use `[webflow-lottie]` to select elements with the `webflow-lottie` attribute.
+   - Note: Accepts any valid CSS selector. [Learn more about selectors](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelectorAll#selectors)
 
-### Lottie Element
+2. **`lazy-load-offset=""`**
+   - Purpose: Sets the threshold for lazy loading Lottie elements.
+   - Default: `125vh` (applies to all directions)
+   - Format: Follows CSS `margin` property syntax.
+   - Example: `"100px 0"` (top and bottom, right and left)
+   - [More about CSS margin syntax](https://developer.mozilla.org/en-US/docs/Web/CSS/margin)
 
-- `webflow-lottie="[property]"` - Enables this library for Webflow. `properties` field does not support `placeholder`
-- `placeholder="[image-URL]"` - Generates a placeholder image that loads with the page, and persists until you scroll and the Lottie element lazy loads in. This attribute may affect performance if you use large or there are too many lotties on your page. Small SVGs or WEBP reccomended.
+3. **`default-attributes="[property separated by spaces]"`**
+   - Purpose: Sets default attributes for all Lottie elements.
+   - Note: Can be overridden by inline attributes on individual elements.
+   - Example: `default-attributes="lazy-load play-once"`
+
+### Lottie Element Attributes
+
+1. **`webflow-lottie="[property separated by spaces]"`**
+   - Purpose: Enables this library for the Lottie element.
+   - Note: Also referred to as "inline attributes".
+   - Example: `webflow-lottie="no-lazy-load fix-filters"`
+
+2. **`placeholder="[image-URL]"`**
+   - Purpose: Sets a placeholder image until the Lottie element lazy loads.
+   - Best Practice: Use small SVGs or WebP images for optimal performance.
+   - Caution: Large or numerous placeholders may impact page load times.
+   - Example: `placeholder="https://example.com/placeholder.png"`
 
 ### Properties
 
-- `lazy-load=""` - Enables lazy loading on that Lottie element.
-- `no-lazy-load=""` - Prevents the Lottie element from being lazy loaded.
-- `play-once=""` - Makes it so that the Lottie element only plays one time and remains static after that first play.
-- `no-play-once=""` - Makes it so that the Lottie element plays when it comes into the viewport.
-- `fix-filters=""` - Fixes the filters and shadows on the Lottie element so that it can be rendered properly and play correctly. (May affect loading and performance)
-- `no-fix-filters=""` - Prevents the Lottie element from being fixed.
-- `fix-transform=""` - Flags an element that is inside of a carousel or other transforming parent so that it can be rendered properly and play correctly. (May affect loading and performance)
-- `no-fix-transform=""` - Prevents the Lottie element from being fixed.
+- `lazy-load`: Enables lazy loading for the Lottie element.
+- `no-lazy-load`: Disables lazy loading for the Lottie element.
+- `play-once`: Plays the Lottie animation once and remains static afterwards.
+- `no-play-once`: Allows the Lottie animation to play each time it enters the viewport.
+- `fix-filters`: Corrects filters and shadows for proper rendering and playback.
+- `no-fix-filters`: Disables filter correction for the Lottie element.
+- `fix-transform`: Ensures proper rendering for elements inside carousels or other transforming parents.
+- `no-fix-transform`: Disables transform correction for the Lottie element.
 
-### Order of precedence
+### Property Precedence
 
-Default properties are applied first, then the inline properties. Whichever values comes LAST shall be taken into account.
+Properties are applied in the following order:
+
+1. Default properties (set in the script tag)
+2. Inline properties (set on individual Lottie elements)
+
+The last specified value for each property takes precedence.
+
+<!--
+## Examples
+
+[] Attach images
+-->
 
 <!--
 ## TODO
 
-[] Attach images
 [] 2 branches - `main` and `develop`
 [] Auto Publish to NPM and Release on GitHub 
 [] Development Guide using an anonymous cloudflare tunnel

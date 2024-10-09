@@ -18,6 +18,3 @@ init({
     script.getAttribute("default-attributes") || ""
   ),
 });
-
-// TODO - SUPPORT [HEIGHT AND WIDTH] to avoid layout shifts
-// ! BUG - ANIMATION HAS PLAYED BEFORE EVEN CURSOR REACHING THERE
